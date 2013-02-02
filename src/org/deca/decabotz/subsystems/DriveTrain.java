@@ -19,9 +19,10 @@ public class DriveTrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
     private RobotDrive drive;
+    CANJaguar leftJag;
+    CANJaguar rightJag;
     public DriveTrain(){
-        CANJaguar leftJag;
-        CANJaguar rightJag;
+        
                 
         try{
             leftJag = new CANJaguar(RobotMap.leftJagDriveID);
@@ -39,6 +40,11 @@ public class DriveTrain extends Subsystem {
         setDefaultCommand(new DualStickDrive());
     }
     public void tankDrive(double leftStick, double rightStick) {
-        drive.tankDrive(leftStick, rightStick);
+        try {
+            leftJag.setX(leftStick);
+            rightJag.setX(leftStick);
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
     }
 }
